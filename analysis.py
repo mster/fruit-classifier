@@ -4,6 +4,8 @@ import h5py
 import scipy
 from PIL import Image
 from scipy import ndimage
+import cv2
+import random
 import json
 
 # importing classifier resources
@@ -42,7 +44,15 @@ def format_results():
 
 	print("Correctly guessed: %s out of %s" % (correct_counter,result["original_training_labels"].shape[0]))
 
-print(result['b'])
+def peek_results():
+	index = random.randrange(classifier.original_validation_images.shape[0])
+	img_data = classifier.original_validation_images[index,:,:,:]
+	img_label = classifier.validation_class_set[index]
+	pyplot.imshow(cv2.cvtColor(np.multiply(img_data,255).astype(np.uint8), cv2.COLOR_BGR2RGB))
+	pyplot.title("Prediction on index: %s, %s" % (index,img_label))
+	pyplot.show()
+
+peek_results()
 
 
 

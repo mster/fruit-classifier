@@ -27,14 +27,14 @@ show_cost = True 							# show cost every 100 iterations
 data_set = utils.read_data_sets(training_path, image_size, classes, validation_size)
 
 # designating training objects
-training_images = data_set.train.images 		# image np.array w/ shape: (image_size, image_size, channel_depth)
-training_labels = data_set.train.labels 		# class label array (exempli gratia '[1.0, 0, 0]' from apple)
-training_class_set = data_set.train.class_set 	# class label string array (e.g. 'apple')
-training_file_name = data_set.train.image_names # original unique image file names
+original_training_images = data_set.train.images 		# image np.array w/ shape: (image_size, image_size, channel_depth)
+original_training_labels = data_set.train.labels 		# class label array (exempli gratia '[1.0, 0, 0]' from apple)
+training_class_set = data_set.train.class_set 			# class label string array (e.g. 'apple')
+training_file_name = data_set.train.image_names 		# original unique image file names
 
 # designating validation objects
-validation_images = data_set.valid.images
-validation_labels = data_set.valid.labels
+original_validation_images = data_set.valid.images
+original_validation_labels = data_set.valid.labels
 validation_class_set = data_set.valid.class_set
 validation_file_name = data_set.valid.image_names
 
@@ -45,10 +45,10 @@ flattening color pixels to single array using transpose function of image pixel 
 	*_images shape: (image_size * image_size * channel_depth, data_set_size)
 	*_labels shape: (data_set_size, channel_depth)
 """
-training_images = training_images.reshape(training_images.shape[0], -1).T
-validation_images = validation_images.reshape(validation_images.shape[0], -1).T
-training_labels = training_labels.T
-validation_labels = validation_labels.T 
+training_images = original_training_images.reshape(original_training_images.shape[0], -1).T
+validation_images = original_validation_images.reshape(original_validation_images.shape[0], -1).T
+training_labels = original_training_labels.T
+validation_labels = original_validation_labels.T 
 # data is now properly formatted and defined respectively
 
 
@@ -323,9 +323,6 @@ def train():
 	  iteration_count=iteration_count, learning_rate=learning_rate, show_cost=show_cost)
 
 	return data
-
-
-
 
 
 
