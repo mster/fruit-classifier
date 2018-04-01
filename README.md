@@ -18,7 +18,7 @@ Fruit Classifier, a single-layered Neural Network used to classify various forms
 ## Example:
 * 300 total fruit images used (apples, bananas, and oranges).
 * 1000 iterations; learning rate of 0.5%; 128x128 images used
-![alt text](https://imgur.com/2uVygBy "Example of prediction")
+![](https://github.com/michaelsterpka/fruit-classifier/blob/master/example_output/figure_1.png "Example of prediction")
 
   
 ## TODO:
