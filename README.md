@@ -26,7 +26,3 @@ Fruit Classifier, a single-hidden-layered Neural Network used to classify variou
 * build layers
 * provide basic ui for results
 * allow for custom image input for testing
-
-$$
-\frac{n!}{k!(n-k)!} = {n \choose k}
-$$
