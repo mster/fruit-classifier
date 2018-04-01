@@ -13,9 +13,9 @@ Fruit Classifier, a single-hidden-layered Neural Network used to classify variou
 ## Example Training:
 * 300 total fruit images used (apples, bananas, and oranges).
 * 1000 iterations; learning rate of 0.5%; 128x128 images used
-![](https://github.com/michaelsterpka/fruit-classifier/blob/master/example_output/figure_1.png "Example of an apple prediction")
-![](https://github.com/michaelsterpka/fruit-classifier/blob/master/example_output/figure_2.png "Example of an orange prediction")
-![](https://github.com/michaelsterpka/fruit-classifier/blob/master/example_output/figure_3.png "Example of an banana prediction")
+<img src="https://github.com/michaelsterpka/fruit-classifier/blob/master/example_output/figure_1.png" text="Exmaple of an apple prediction" width="50%"/>
+<img src="https://github.com/michaelsterpka/fruit-classifier/blob/master/example_output/figure_2.png" text="Exmaple of an orange prediction" width="50%"/>
+<img src="https://github.com/michaelsterpka/fruit-classifier/blob/master/example_output/figure_3.png" text="Exmaple of a banana prediction" width="50%"/>
 
 ## Resources used:
 * [NumPy](http://www.numpy.org/): A scientific computing package for Python. 
