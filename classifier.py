@@ -58,12 +58,12 @@ def sigmoid(z):
 
 	Parameters: 
 		-- z = w^T * x^i + b 
-		-- w^T: specific weight associated with nueron index from previous layer
-		-- x^i: specific nueron value from previous layer
+		-- w^T: specific weight associated with neuron index from previous layer
+		-- x^i: specific neuron value from previous layer
 		-- b: bias associated with neuron 
 
 	Return:
-	s: result of applying sigmoid activation function (domain in R, returns monotonicingly increasing value between 0 and 1)
+	s: result of applying sigmoid activation function (domain in R, returns monotonically increasing value between 0 and 1)
 		s = 1 / (1 + e^-z)
 	"""
 
