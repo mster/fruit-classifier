@@ -1,5 +1,5 @@
 # fruit-classifier
-Fruit Classifier, a single-layered Neural Network used to classify various forms of fruit from image input.
+Fruit Classifier, a single-hidden-layered Neural Network used to classify various forms of fruit from image input.
 
 ## About:
 * The project was divided into three sections: data loading, training and predicting, and analysis.
