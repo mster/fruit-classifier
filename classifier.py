@@ -30,7 +30,7 @@ data_set = utils.read_data_sets(training_path, image_size, classes, validation_s
 training_images = data_set.train.images 		# image np.array w/ shape: (image_size, image_size, channel_depth)
 training_labels = data_set.train.labels 		# class label array (exempli gratia '[1.0, 0, 0]' from apple)
 training_class_set = data_set.train.class_set 	# class label string array (e.g. 'apple')
-training_file_name = data_set.train.image_names
+training_file_name = data_set.train.image_names # original unique image file names
 
 # designating validation objects
 validation_images = data_set.valid.images
@@ -38,19 +38,18 @@ validation_labels = data_set.valid.labels
 validation_class_set = data_set.valid.class_set
 validation_file_name = data_set.valid.image_names
 
-# reshaping using matrix transposition
+
+"""
+Reshaping data arrays using matrix transposition
+flattening color pixels to single array using transpose function of image pixel matrix
+	*_images shape: (image_size * image_size * channel_depth, data_set_size)
+	*_labels shape: (data_set_size, channel_depth)
+"""
 training_images = training_images.reshape(training_images.shape[0], -1).T
 validation_images = validation_images.reshape(validation_images.shape[0], -1).T
 training_labels = training_labels.T
-validation_labels = validation_labels.T
-
-#data is now properly formatted and defined respectively
-
-"""
-flattening pixels to single layer using transpose function of image pixel matrix
-shape: (image_size * image_size * channel_dept, len(training_images))
-"""
-#flattened = training_images.reshape(training_images.shape[0], -1).T
+validation_labels = validation_labels.T 
+# data is now properly formatted and defined respectively
 
 
 def sigmoid(z):
@@ -110,17 +109,11 @@ def cross_entropy_cost(m, A, L):
 	
 
 	Calculation of Cross-Entropy Cost:
-		C = (-1/m) * Sigma([y^i * log(A^i] + [1 - L^i] * [log(1 - A^i])) 
+		C = (-1 / m) * Sigma([L[i] * log(A[i]) + (1 - L[i]) * (log(1 - A[i])) 
 			from i = 1 to m
 	"""
+	cost = (-1 / m) * np.sum(L * np.log(A) + (1 - L) * (np.ma.log(1 - A))) #Note: Using numpy masked array np.ma for values of log(0)
 
-	#Note: Using numpy masked array np.ma for values of log(0)
-	cost = (-1 / m) * np.sum(L * np.log(A) + (1 - L) * (np.ma.log(1 - A)))
-	if math.isnan(cost):
-		print(np.log(A))
-		print(1-A)
-		print(np.log(1-A))
-		exit()
 
 	# Sanity checks
 	cost = np.squeeze(cost) 	#squeeze() removes single dimensional elements from the array: e.g. (1, 3, 1) -> (3,)
@@ -130,8 +123,7 @@ def cross_entropy_cost(m, A, L):
 
 def propagate(w, b, image_matrix, true_labels):
 	"""
-	Forwards and Backwards Propagation of Error
-
+	Forwards and Backwards Propagation of Error.
 
 	Parameters: 
 		-- w: weights numpy array w/ shape: (image_size * image_size * channel_depth, 1)
@@ -140,8 +132,8 @@ def propagate(w, b, image_matrix, true_labels):
 		-- true_labels: correct "label" array for each image w/ shape (1, image_matrix.shape[1])
 
 	Returns:
-		-- gradients:
-		-- cost: 
+		-- gradients: the weight and bias gradients computed from the activation layer
+		-- cost: the cross entropy cost of the logistic regression 
 
 	"""
 
@@ -149,30 +141,22 @@ def propagate(w, b, image_matrix, true_labels):
 
 	"""
 	FORWARD PROPAGATION: output compared to actual to obtain cost (error)
-	activation_val: 
-		sigmoid(z) w/ z = w^T * x^i + b
-	cost: cross_entropy_cost(m, A, L)
+		-- activation_layer: sigmoid of the linear function
+			sigmoid(z) w/ z = w^T * x^i + b
+		-- cost: see cross_entropy_cost(m, A, L)
 	"""
-
-	# debugging
-	#flattened = training_images.reshape(training_images.shape[0], -1).T
-	#print("flatX: %s\n w.T: %s\n" % (flattened.shape, w.T.shape))
-
-
-
-	activation_val = sigmoid(np.dot(w.T, image_matrix) + b) 
-	cost = cross_entropy_cost(m, activation_val, true_labels)
-
-	#cost = (-1 / m) * np.sum(true_labels * np.log(activation_val) + (1 - true_labels) * (np.log(1 - activation_val)))
+	activation_layer = sigmoid(np.dot(w.T, image_matrix) + b) 
+	cost = cross_entropy_cost(m, activation_layer, true_labels)
 
 	"""
-	BACKWARD PROPAGATION: to obtain gradient of loss for weights and biases as to minimize error of network
-	dw: gradient of loss with respect to w
-	db: gradient of loss with respect to b
+	BACKWARD PROPAGATION: to obtain gradient of loss for weights and bias as to minimize error of network
+		-- dw: gradient of loss with respect to w
+		-- db: gradient of loss with respect to b
 	"""
-	dw = (1 / m) * np.dot(image_matrix, (activation_val - true_labels).T)
-	db = (1 / m) * np.sum(activation_val - true_labels)
+	dw = (1 / m) * np.dot(image_matrix, (activation_layer - true_labels).T) 
+	db = (1 / m) * np.sum(activation_layer - true_labels)
 
+	# sanity check
 	assert(dw.shape == w.shape) #checks if weight gradient retains weight matrix shape
 	assert(db.dtype == float)	#checks if bias gradient is a scalar
 
@@ -186,7 +170,7 @@ def propagate(w, b, image_matrix, true_labels):
 
 def gradient_descent(w, b, image_matrix, true_labels, iteration_count, learning_rate, show_cost):
 	"""
-	Gradient Descent optimization of weights and biases
+	Gradient Descent optimization of weights and bias scaled by learning rate parameter
 
 	Parameters:
 		-- w: weights array w/ shape: (image_size * image_size * channel_depth, 1)
@@ -198,10 +182,12 @@ def gradient_descent(w, b, image_matrix, true_labels, iteration_count, learning_
 		-- show_cost: print cost value to console every 100 iterations
 
 	Return:
-		-- 
+		-- parameters: post-step weight array and bias value
+		-- gradients: weight and bias gradients computed through back propagation
+		-- costs: cost array holding incremental cost values
 
 	Notes:
-		-- 
+		-- Other methods may be used to optimize the weights and bias
 	"""
 
 	costs = []
@@ -213,15 +199,18 @@ def gradient_descent(w, b, image_matrix, true_labels, iteration_count, learning_
 		# 	print(np.squeeze(A))
 		# 	print(cross_entropy_cost(image_matrix.shape[1], A, true_labels))
 
-		dw = gradients['dw']
-		db = gradients['db']
+		dw = gradients['dw']  # obtaining weight gradient from back propagation
+		db = gradients['db']  # obtaining bias gradient from back propagation
 
-		w = w - learning_rate * dw
-		b = b - learning_rate * db
+		w = w - learning_rate * dw  # w array stepping towards local minimum with steps of length: learning_rate
+		b = b - learning_rate * db  # b value stepping
 
-		if i % 100 == 0:
+		# appends cost value at given iteration increments to costs array for analystics
+		collection_rate = 1
+		if i % collection_rate == 0:
 			costs.append(cost)
 
+		# Shows cost value every 100 iterations if True
 		if show_cost and i % 100 == 0 and i != 0:
 			print('Iteration: %i, Cost: %f' % (i, cost))
 
@@ -239,15 +228,15 @@ def gradient_descent(w, b, image_matrix, true_labels, iteration_count, learning_
 
 def predict(w, b, image_matrix):
 	"""
-	Makes a prediction of label using parameters obtained from learning
+	Makes a prediction about label using parameters obtained from learning
 
 	Parameters:
-		-- w: weights array w/ shape: (image_size * image_size * channel_depth, 1)
+		-- w: weights array w/ shape: (image_size * image_size * channel_depth, 3)
 		-- b: bias scalar
 		-- image_matrix: flattened image matrix w/ shape (image_size * image_size * channel_depth, m)
 
 	Returns:
-		-- prediction_labels: numpy array containing all predictions for data in image_matrix
+		-- prediction_labels: numpy array containing prediction labels computed from the activation layer
 
 	Notes:
 
@@ -255,21 +244,43 @@ def predict(w, b, image_matrix):
 	m = image_matrix.shape[1] 					# grab set size again
 	prediction_labels = np.zeros((3, m))		# init vector
 
-	activation_val = sigmoid(np.dot(w.T, image_matrix) + b) 
+	activation_layer = sigmoid(np.dot(w.T, image_matrix) + b) # computer sigmoid on prediction data
 
-	for i in range(activation_val.shape[1]):
-		for j in range(3):
-			if activation_val[j, i] > 0.5:
-				prediction_labels[j, i] = 1
-			else:
-				prediction_labels[j, i] = 0
+	# iterates over the activation layer, rounding to the nearest integer, and assigning value to prediction label array
+	for i in range(activation_layer.shape[1]):	# covers each data set
+		for j in range(3): 						# covers label value within each data set
+			if activation_layer[j, i] > 0.5:		# rounding activation value to nearest int (0 or 1)
+				prediction_labels[j, i] = 1		# assigning such value to respective location in the prediction label array
+			else:								
+				prediction_labels[j, i] = 0		# if lower than 0.5, the label is set to False; 0
 
+	# sanity check
 	assert(prediction_labels.shape == (3, m))
 
 	return prediction_labels
 
 def model(training_images, training_labels, validation_images, validation_labels, iteration_count, learning_rate, show_cost):
 	"""
+	Construction of the actual model for training and predicting data
+
+	Parameters:
+		-- training_images: 
+	Returns:
+		-- data:
+			costs: the incremental cost value array
+			prediction_training_labels: final predictions made by the network on the training data
+			prediction_validation_labels: final predication made by the network on the validation data
+			original_training_labels: the true labels for the training data
+			original_validation_lables: the true labels for the validation data
+			w: the final weight array for the network
+			b: the final bias value for the network
+			learning_rate: the rate at which to step towards a local minimum during gradient descent
+			iteration_count: the number of epochs until end
+
+
+	Notes:
+		-- As this is a simple network, only a single bias value and weight array are used. 
+		-- More sophisticated networks incorporate several layers of different styles and distinct operators
 	"""
 
 	# init weight and bias arrays
@@ -285,6 +296,7 @@ def model(training_images, training_labels, validation_images, validation_labels
 	prediction_training_labels = predict(w, b, training_images)
 	prediction_validation_labels = predict(w, b, validation_images)
 
+	# Calculates the average proximity of each prediction to the true (normalized)
 	training_accuracy = (1 - np.mean(np.abs(prediction_training_labels - training_labels)))
 	validation_accuracy = (1 - np.mean(np.abs(prediction_validation_labels - validation_labels)))
 
