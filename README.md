@@ -10,6 +10,10 @@ Fruit Classifier, a single-layered Neural Network used to classify various forms
   * The network uses the **Sigmoid Activation** function and the **Cross-Entropy Cost** function for forward propogation.
   * Back propogation is handled by the **Gradient Descent** function.
   
+## Resources used:
+* [NumPy](http://www.numpy.org/): A scientific computing package for Python. 
+* [scikit-learn](http://scikit-learn.org/): A machine learning library in Python. 
+* [Matplotlib](https://matplotlib.org/): A plotting library for Python.
   
 ## TODO:
 * optimize data_set loader
