@@ -9,19 +9,18 @@ Fruit Classifier, a single-layered Neural Network used to classify various forms
 * `classifier.py` handles computation and model creation, forming a single-layered NN.
   * The network uses the **Sigmoid Activation** function and the **Cross-Entropy Cost** function for forward propogation.
   * Back propogation is handled by the **Gradient Descent** function.
-  
-## Resources used:
-* [NumPy](http://www.numpy.org/): A scientific computing package for Python. 
-* [scikit-learn](http://scikit-learn.org/): A machine learning library in Python. 
-* [Matplotlib](https://matplotlib.org/): A plotting library for Python.
 
-## Example:
+## Example Training:
 * 300 total fruit images used (apples, bananas, and oranges).
 * 1000 iterations; learning rate of 0.5%; 128x128 images used
 ![](https://github.com/michaelsterpka/fruit-classifier/blob/master/example_output/figure_1.png "Example of an apple prediction")
 ![](https://github.com/michaelsterpka/fruit-classifier/blob/master/example_output/figure_2.png "Example of an orange prediction")
 ![](https://github.com/michaelsterpka/fruit-classifier/blob/master/example_output/figure_3.png "Example of an banana prediction")
 
+## Resources used:
+* [NumPy](http://www.numpy.org/): A scientific computing package for Python. 
+* [scikit-learn](http://scikit-learn.org/): A machine learning library in Python. 
+* [Matplotlib](https://matplotlib.org/): A plotting library for Python.
   
 ## TODO:
 * optimize data_set loader
