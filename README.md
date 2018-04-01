@@ -10,7 +10,7 @@ Fruit Classifier, a single-hidden-layered Neural Network used to classify variou
   * The network uses the **Sigmoid Activation** function and the **Cross-Entropy Cost** function for forward propogation.
   * Back propogation is handled by the **Gradient Descent** function.
 
-## Example Training:
+## Training:
 * 300 total fruit images used (apples, bananas, and oranges).
 * 1000 iterations; learning rate of 0.5%; 128x128 images used
 <img src="https://github.com/michaelsterpka/fruit-classifier/blob/master/example_output/figure_1.png" text="Exmaple of an apple prediction" width="50%"/><img src="https://github.com/michaelsterpka/fruit-classifier/blob/master/example_output/figure_2.png" text="Exmaple of an orange prediction" width="50%"/><img src="https://github.com/michaelsterpka/fruit-classifier/blob/master/example_output/figure_3.png" text="Exmaple of a banana prediction" width="50%"/><img src="https://github.com/michaelsterpka/fruit-classifier/blob/master/example_output/figure_4.png" text="Exmaple of a odd apple image prediction" width="50%"/>
