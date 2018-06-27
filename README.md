@@ -20,9 +20,3 @@ Fruit Classifier: A mathematical network utilizing [Linear Regression](https://e
 * [scikit-learn](http://scikit-learn.org/): A machine learning library in Python. 
 * [Matplotlib](https://matplotlib.org/): A plotting library for Python.
   
-## TODO:
-* optimize data_set loader
-* complete activation functions
-* build layers
-* provide basic ui for results
-* allow for custom image input for testing
